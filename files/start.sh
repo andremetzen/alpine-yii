@@ -68,5 +68,5 @@ done
 # start php-fpm and nginx
 cron -f &
 touch /etc/crontab
-/etc/init.d/php5-fpm start 
-exec /usr/sbin/nginx
+php-fpm
+exec nginx
