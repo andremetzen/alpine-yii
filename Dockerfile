@@ -2,7 +2,7 @@ FROM alpine:3.3
 MAINTAINER Andre Metzen <metzen@conceptho.com>
 
 RUN apk add --update bash curl git nginx ca-certificates \
-    php-fpm php-json php-zlib php-xml php-pdo php-phar php-openssl php-dom php-intl \
+    php-fpm php-json php-zlib php-xml php-pdo php-phar php-openssl php-dom php-intl php-ctype \
     php-pdo_mysql php-mysqli php-memcache \
     php-gd php-iconv php-mcrypt nodejs musl && rm -rf /var/cache/apk/*
 
