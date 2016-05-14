@@ -13,10 +13,6 @@ RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
 ENV PATH /root/.composer/vendor/bin:$PATH
 RUN npm install -g bower
 
-ADD files /src
-RUN cp -rf /src/* /
-RUN rm -rf /src
-
 EXPOSE 80
 
 CMD ["bash", "/start.sh"]
