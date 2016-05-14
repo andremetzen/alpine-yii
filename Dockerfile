@@ -7,11 +7,14 @@ RUN apk add --update bash curl git nginx ca-certificates \
     php-gd php-iconv php-mcrypt nodejs musl && rm -rf /var/cache/apk/*
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
-RUN composer config -g github-oauth.github.com 4fb69fa0f79c4d0f251404898bbf3ae87d6f28d0
 RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 RUN npm install -g bower
+
+ADD files /src
+RUN cp -rf /src/* /
+RUN rm -rf /src
 
 EXPOSE 80
 
