@@ -3,7 +3,7 @@ MAINTAINER Andre Metzen <metzen@conceptho.com>
 
 RUN apk add --update bash curl git ca-certificates \
     php-fpm php-json php-zlib php-xml php-pdo php-phar php-curl php-openssl php-dom php-intl php-ctype \
-    php-pdo_mysql php-mysqli php-memcache \
+    php-pdo_mysql php-mysqli \
     php-gd php-iconv php-mcrypt nodejs && rm -rf /var/cache/apk/*
 
 RUN \
@@ -71,6 +71,8 @@ RUN apk add --update xvfb ttf-freefont fontconfig dbus \
   ' > /usr/bin/wkhtmltopdf && \
       chmod +x /usr/bin/wkhtmltopdf \
     && rm -rf /var/cache/apk/*
+
+RUN apk add php-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
 RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
