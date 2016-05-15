@@ -8,12 +8,12 @@ function setEnvironmentVariable {
     fi
 
     # Check whether variable already exists
-    if grep -q $1 /etc/php5/fpm/pool.d/env.conf; then
+    if grep -q $1 /etc/php/fpm/env.conf; then
         # Reset variable
-        sed -i "s/^env\[$1.*/env[$1] = $2/g" /etc/php5/fpm/pool.d/env.conf
+        sed -i "s/^env\[$1.*/env[$1] = $2/g" /etc/php/fpm/env.conf
     else
         # Add variable
-        echo "env[$1] = $2" >> /etc/php5/fpm/pool.d/env.conf
+        echo "env[$1] = $2" >> /etc/php/fpm/env.conf
     fi
 }
 
@@ -66,7 +66,6 @@ done
 /srv/www/yii migrate/up --interactive=0
 
 # start php-fpm and nginx
-cron -f &
-touch /etc/crontab
+crond -l 2
 php-fpm
 exec nginx
