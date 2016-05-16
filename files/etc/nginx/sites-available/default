@@ -47,6 +47,7 @@ server {
 
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|ttf|woff|woff2)$ {
                 expires max;
+                add_header Cache-Control public;
                 log_not_found off;
                 access_log off;
                 sendfile off;
