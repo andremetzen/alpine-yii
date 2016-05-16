@@ -3,7 +3,7 @@ MAINTAINER Andre Metzen <metzen@conceptho.com>
 
 RUN apk add --update bash curl git ca-certificates \
     php-fpm php-json php-zlib php-xml php-pdo php-phar php-curl php-openssl php-dom php-intl php-ctype \
-    php-pdo_mysql php-mysqli \
+    php-pdo_mysql php-mysqli php-opcache \
     php-gd php-iconv php-mcrypt nodejs && rm -rf /var/cache/apk/*
 
 RUN \
