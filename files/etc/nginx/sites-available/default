@@ -46,6 +46,7 @@ server {
         }
 
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|ttf|woff|woff2)$ {
+                gzip on;
                 expires max;
                 add_header Cache-Control public;
                 log_not_found off;
