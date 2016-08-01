@@ -70,9 +70,16 @@ RUN apk add --update xvfb ttf-freefont fontconfig dbus \
   killall Xvfb\
   ' > /usr/bin/wkhtmltopdf && \
       chmod +x /usr/bin/wkhtmltopdf \
+      && mv /usr/bin/wkhtmltoimage /usr/bin/wkhtmltoimage-origin \
+      && echo $'#!/usr/bin/env sh\n\
+  Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
+  DISPLAY=:0.0 wkhtmltoimage-origin $@ \n\
+  killall Xvfb\
+  ' > /usr/bin/wkhtmltoimage && \
+      chmod +x /usr/bin/wkhtmltoimage \
     && rm -rf /var/cache/apk/*
 
-RUN apk add php-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+RUN apk add php5-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
 RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
