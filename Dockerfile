@@ -1,10 +1,13 @@
-FROM alpine:3.3
+FROM alpine:3.4
 MAINTAINER Andre Metzen <metzen@conceptho.com>
 
 RUN apk add --update bash curl git ca-certificates \
-    php-fpm php-json php-zlib php-xml php-pdo php-phar php-curl php-openssl php-dom php-intl php-ctype \
-    php-pdo_mysql php-mysqli php-opcache \
-    php-gd php-iconv php-mcrypt nodejs && rm -rf /var/cache/apk/*
+    php5-fpm php5-json php5-zlib php5-xml php5-pdo php5-phar php5-curl \
+    php5-openssl php5-dom php5-intl php5-ctype \
+    php5-pdo_mysql php5-mysqli php5-opcache \
+    php5-gd php5-iconv php5-mcrypt nodejs && rm -rf /var/cache/apk/*
+
+RUN apk add php5-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
 
 RUN \
   build_pkgs="build-base linux-headers openssl-dev pcre-dev wget zlib-dev" && \
@@ -62,7 +65,7 @@ RUN \
 RUN mkdir /var/cache/nginx
 
 RUN apk add --update xvfb ttf-freefont fontconfig dbus \
-      && apk add wkhtmltopdf --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+      && apk add qt5-qtbase-dev wkhtmltopdf --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
       && mv /usr/bin/wkhtmltopdf /usr/bin/wkhtmltopdf-origin \
       && echo $'#!/usr/bin/env sh\n\
   Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
@@ -78,8 +81,6 @@ RUN apk add --update xvfb ttf-freefont fontconfig dbus \
   ' > /usr/bin/wkhtmltoimage && \
       chmod +x /usr/bin/wkhtmltoimage \
     && rm -rf /var/cache/apk/*
-
-RUN apk add php5-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
 RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
