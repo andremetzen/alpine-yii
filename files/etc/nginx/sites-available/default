@@ -45,7 +45,7 @@ server {
                 fastcgi_read_timeout 600;
         }
 
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico|ttf|woff|woff2)$ {
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|ttf|woff|woff2)$ {
                 gzip on;
                 expires max;
                 add_header Cache-Control public;
