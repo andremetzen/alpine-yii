@@ -1,13 +1,16 @@
-FROM alpine:3.4
+FROM alpine:3.8
 MAINTAINER Andre Metzen <metzen@conceptho.com>
 
 RUN apk add --update bash curl git ca-certificates \
     php5-fpm php5-json php5-zlib php5-xml php5-pdo php5-phar php5-curl \
     php5-openssl php5-dom php5-intl php5-ctype \
-    php5-pdo_mysql php5-mysqli php5-opcache \
-    php5-gd php5-iconv php5-mcrypt nodejs && rm -rf /var/cache/apk/*
-
-RUN apk add php5-memcached --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+    php5-pdo_mysql php5-mysqli php5-opcache php5-cli \
+    php5-gd php5-iconv php5-mcrypt nodejs \
+    libgcc libstdc++ libx11 glib libxrender libxext libintl \
+    libcrypto1.0 libssl1.0 \
+    ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family \
+    && rm -rf /var/cache/apk/* \
+    && mv /usr/bin/php5 /usr/bin/php
 
 RUN \
   build_pkgs="build-base linux-headers openssl-dev pcre-dev wget zlib-dev" && \
@@ -64,31 +67,17 @@ RUN \
 
 RUN mkdir /var/cache/nginx
 
-RUN apk add --update xvfb ttf-freefont fontconfig dbus \
-      && apk add qt5-qtbase-dev wkhtmltopdf --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
-      && mv /usr/bin/wkhtmltopdf /usr/bin/wkhtmltopdf-origin \
-      && echo $'#!/usr/bin/env sh\n\
-  Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
-  DISPLAY=:0.0 wkhtmltopdf-origin $@ \n\
-  killall Xvfb\
-  ' > /usr/bin/wkhtmltopdf && \
-      chmod +x /usr/bin/wkhtmltopdf \
-      && mv /usr/bin/wkhtmltoimage /usr/bin/wkhtmltoimage-origin \
-      && echo $'#!/usr/bin/env sh\n\
-  Xvfb :0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset & \n\
-  DISPLAY=:0.0 wkhtmltoimage-origin $@ \n\
-  killall Xvfb\
-  ' > /usr/bin/wkhtmltoimage && \
-      chmod +x /usr/bin/wkhtmltoimage \
-    && rm -rf /var/cache/apk/*
-
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/bin/composer
 RUN composer global require "fxp/composer-asset-plugin:~1.1.3"
+
+RUN apk add npm
 
 ENV PATH /root/.composer/vendor/bin:$PATH
 RUN npm install -g bower
 
 COPY files /
+
+RUN chmod +x /usr/bin/wkhtmltopdf
 
 EXPOSE 80
 
